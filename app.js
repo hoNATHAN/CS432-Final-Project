@@ -172,6 +172,9 @@ class Drawable {
 }
 
 var plane;
+var painting2;
+var painting3;
+var vase;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -212,6 +215,11 @@ window.onload = function init() {
     shine,
   );
 
+  painting = new Painting(0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/mona_lisa.jpg");
+  painting2 = new Painting(2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/starry_night.jpg");
+  painting3 = new Painting(-2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/girl_with_pearl_earrings.jpg");
+  vase = new Vase(-5, 1, 1, 1, 0, 0, 0, amb, dif, spec, shine, "/textures/vase_texture.png");
+
   render();
 };
 
@@ -220,5 +228,9 @@ function render() {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     plane.draw();
+    painting.draw();
+    painting2.draw();
+    painting3.draw();
+    vase.draw();
   }, 100); //10fps
 }

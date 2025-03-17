@@ -150,7 +150,7 @@ class Plane extends Drawable {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
     };
 
-    image.src = "256x grass block.png";
+    image.src = "/textures/256x grass block.png";
   }
 
   constructor(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, sp, sh) {
