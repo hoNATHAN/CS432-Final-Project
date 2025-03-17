@@ -172,6 +172,7 @@ class Drawable {
 }
 
 var plane;
+var painting;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -212,6 +213,8 @@ window.onload = function init() {
     shine,
   );
 
+  painting = new Painting(0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "mona_lisa.jpg");
+
   render();
 };
 
@@ -220,5 +223,6 @@ function render() {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     plane.draw();
+    painting.draw();
   }, 100); //10fps
 }
