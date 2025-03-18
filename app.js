@@ -175,6 +175,7 @@ var plane;
 var painting2;
 var painting3;
 var vase;
+var spotlight;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -215,11 +216,22 @@ window.onload = function init() {
     shine,
   );
 
+  spotlight = new Spotlight(
+    1.0, 1.0, -5.0,  // Position (tx, ty, tz)
+    0.25,              // Scale (uniform scale factor)
+    0.0, 0.0, 0.0,    // Rotation angles (rotX, rotY, rotZ)
+    vec4(0.1, 0.1, 0.1, 1.0), // Ambient color (RGB)
+    vec4(1.0, 1.0, 1.0, 1.0), // Diffuse color (RGB)
+    vec4(1.0, 1.0, 1.0, 1.0), // Specular color (RGB)
+    shine,              // Shininess coefficient
+    "/textures/spotlight.jpg",  // Texture file path (optional)
+    light1
+);
+
   painting = new Painting(0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/mona_lisa.jpg");
   painting2 = new Painting(2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/starry_night.jpg");
   painting3 = new Painting(-2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/girl_with_pearl_earrings.jpg");
   vase = new Vase(-5, 1, 1, 1, 0, 0, 0, amb, dif, spec, shine, "/textures/vase_texture.png");
-
   render();
 };
 
@@ -232,5 +244,6 @@ function render() {
     painting2.draw();
     painting3.draw();
     vase.draw();
+    spotlight.draw();
   }, 100); //10fps
 }

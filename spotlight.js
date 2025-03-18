@@ -22,6 +22,10 @@ class Spotlight extends Drawable {
     static uLightPositionShader = -1;
     static uCameraPositionShader = -1;  // Added camera position uniform
 
+    static uSpotDirectionShader = -1;
+    static uSpotCutoffShader = -1;
+    static uSpotExponentShader = -1;
+
     static generateSpotlight() {
         const slices = 36;  // Number of segments around the circumference
         const stacks = 20;  // Number of segments from top to bottom
@@ -104,6 +108,10 @@ class Spotlight extends Drawable {
         Spotlight.uShininessShader = gl.getUniformLocation(Spotlight.shaderProgram, "uShininess");
         Spotlight.uLightPositionShader = gl.getUniformLocation(Spotlight.shaderProgram, "uLightPosition");
         Spotlight.uCameraPositionShader = gl.getUniformLocation(Spotlight.shaderProgram, "uCameraPosition");
+
+        Spotlight.uSpotDirectionShader = gl.getUniformLocation(Spotlight.shaderProgram, "uSpotDirection");
+        Spotlight.uSpotCutoffShader = gl.getUniformLocation(Spotlight.shaderProgram, "uSpotCutoff");
+        Spotlight.uSpotExponentShader = gl.getUniformLocation(Spotlight.shaderProgram, "uSpotExponent");
     }
 
     initializeTexture(imageSrc) {
@@ -134,6 +142,10 @@ class Spotlight extends Drawable {
         this.diffuseProduct = dif;
         this.specularProduct = sp;
         this.shininess = sh;
+
+        this.spotDirection = vec3(0.0, -1.0, 0.0); // Points downward by default along the y-axis
+        this.spotCutoff = Math.cos(Math.PI / 6); // 30 degrees cutoff angle (in cos units)
+        this.spotExponent = 4.0; // Controls the spotlight's focus sharpness
     }
 
     draw() {
@@ -141,6 +153,29 @@ class Spotlight extends Drawable {
   
         gl.useProgram(Spotlight.shaderProgram);
         
+
+        // Calculate spotlight direction in world space
+        // This transforms the spotlight direction by the model's rotation
+        const modelRotation = mat3(
+            this.modelMatrix[0][0], this.modelMatrix[0][1], this.modelMatrix[0][2],
+            this.modelMatrix[1][0], this.modelMatrix[1][1], this.modelMatrix[1][2],
+            this.modelMatrix[2][0], this.modelMatrix[2][1], this.modelMatrix[2][2]
+        );
+        
+        const worldSpotDirection = normalize(mult(modelRotation, this.spotDirection));
+        
+        // Pass spotlight parameters to the shader
+        gl.uniform3fv(Spotlight.uSpotDirectionShader, flatten(worldSpotDirection));
+        gl.uniform1f(Spotlight.uSpotCutoffShader, this.spotCutoff);
+        gl.uniform1f(Spotlight.uSpotExponentShader, this.spotExponent);
+        
+        // Set light position to be at the base (wide part) of the spotlight
+        // The base is at y = -1.5 in the model's local space (based on your generateSpotlight function)
+        const localLightPos = vec4(0.0, -1.5, 0.0, 1.0);
+        const worldLightPos = mult(this.modelMatrix, localLightPos);
+        gl.uniform4fv(Spotlight.uLightPositionShader, flatten(worldLightPos));
+        
+
         // Set vertex positions
         gl.bindBuffer(gl.ARRAY_BUFFER, Spotlight.positionBuffer);
         gl.vertexAttribPointer(Spotlight.aPositionShader, 3, gl.FLOAT, false, 0, 0);
@@ -204,6 +239,9 @@ class Spotlight extends Drawable {
         gl.disableVertexAttribArray(Spotlight.aPositionShader);
         gl.disableVertexAttribArray(Spotlight.aNormalShader);
         gl.disableVertexAttribArray(Spotlight.aTextureCoordShader);
+
+
+        
     }
     
 }
