@@ -92,10 +92,10 @@ class Camera {
         this.vrp = add(this.vrp, scale(step, this.u));
         break;
       case "j":
-        this.rotateView(this.v, -5);
+        this.rotateView(this.v, -10);
         break;
       case "l":
-        this.rotateView(this.v, 5);
+        this.rotateView(this.v, 10);
         break;
     }
 
@@ -164,6 +164,9 @@ var plane;
 var painting2;
 var painting3;
 var vase;
+var wallLeft;
+var wallRight;
+var ceiling;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -204,9 +207,51 @@ window.onload = function init() {
     shine,
   );
 
+  wallLeft = new Wall(
+    -3,
+    0.5,
+    3,
+    1,
+    0,
+    0,
+    0,
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(0.6, 0.1, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    100.0,
+  );
+
+  wallRight = new Wall(
+    3,
+    0.5,
+    3,
+    1,
+    0,
+    0,
+    0,
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(0.6, 0.1, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    100.0,
+  );
+
+  ceiling = new Ceiling(
+    0,
+    0.5,
+    3,
+    1,
+    0,
+    0,
+    0,
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(0.6, 0.1, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    100.0,
+  );
+
   painting = new Painting(
     0,
-    1,
+    10,
     1,
     1,
     0,
@@ -218,9 +263,10 @@ window.onload = function init() {
     32,
     "/paintings/mona_lisa.jpg",
   );
+
   painting2 = new Painting(
     2,
-    1,
+    10,
     1,
     1,
     0,
@@ -232,9 +278,10 @@ window.onload = function init() {
     32,
     "/paintings/starry_night.jpg",
   );
+
   painting3 = new Painting(
     -2,
-    1,
+    10,
     1,
     1,
     0,
@@ -246,6 +293,7 @@ window.onload = function init() {
     32,
     "/paintings/girl_with_pearl_earrings.jpg",
   );
+
   vase = new Vase(
     -5,
     1,
@@ -273,5 +321,8 @@ function render() {
     painting2.draw();
     painting3.draw();
     vase.draw();
+    wallLeft.draw();
+    wallRight.draw();
+    ceiling.draw();
   }, 100); //10fps
 }
