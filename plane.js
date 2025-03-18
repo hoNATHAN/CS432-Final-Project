@@ -63,10 +63,10 @@ class Plane extends Drawable {
     Plane.vertexTextureCoords = [];
     Plane.indices = [];
 
-    const a = vec3(-1.0, 0.0, -1.0);
-    const b = vec3(-1.0, 0.0, 1.0);
-    const c = vec3(1.0, 0.0, 1.0);
-    const d = vec3(1.0, 0.0, -1.0);
+    const a = vec3(-2.0, 0.0, -2.0);
+    const b = vec3(-2.0, 0.0, 2.0);
+    const c = vec3(2.0, 0.0, 2.0);
+    const d = vec3(2.0, 0.0, -2.0);
 
     Plane.divideQuad(a, b, c, d, subdivisionDepth);
   }
