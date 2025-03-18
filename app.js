@@ -79,47 +79,36 @@ class Camera {
 
   move(key, step) {
     switch (key) {
-      case "ArrowUp":
+      case "w":
         this.vrp = add(this.vrp, scale(-step, this.n));
         break;
-      case "ArrowLeft":
+      case "a":
         this.vrp = add(this.vrp, scale(-step, this.u));
         break;
-      case "ArrowDown":
+      case "s":
         this.vrp = add(this.vrp, scale(step, this.n));
         break;
-      case "ArrowRight":
+      case "d":
         this.vrp = add(this.vrp, scale(step, this.u));
         break;
-      case "z":
-        this.rotateView(this.n, 5);
-        break;
-      case "Z":
-        this.rotateView(this.n, -5);
-        break;
-      case "x":
-        this.rotateView(this.u, 5);
-        break;
-      case "X":
-        this.rotateView(this.u, -5);
-        break;
-      case "c":
-        this.rotateView(this.v, 5);
-        break;
-      case "C":
+      case "j":
         this.rotateView(this.v, -5);
+        break;
+      case "l":
+        this.rotateView(this.v, 5);
         break;
     }
 
+    console.log(this.cameraMatrix);
     this.updateCameraMatrix();
   }
 }
 
 var camera = new Camera(
-  vec3(0, 5, 5),
+  vec3(0, 1, 5),
   vec3(1, 0, 0),
-  vec3(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2),
-  vec3(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2),
+  vec3(0, 1, 0),
+  vec3(0, 0, 1),
 );
 
 var light1 = new Light(
@@ -190,7 +179,7 @@ window.onload = function init() {
   window.addEventListener("keydown", (event) => {
     const step = 1;
     const key = event.key;
-    camera.move(key, step);
+    camera.move(key.toLowerCase(), step);
   });
 
   var pos = vec3(0, 0, 0);
