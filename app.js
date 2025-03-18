@@ -237,7 +237,7 @@ window.onload = function init() {
 
   ceiling = new Ceiling(
     0,
-    0.5,
+    0,
     3,
     1,
     0,
@@ -251,7 +251,7 @@ window.onload = function init() {
 
   painting = new Painting(
     0,
-    10,
+    1,
     1,
     1,
     0,
