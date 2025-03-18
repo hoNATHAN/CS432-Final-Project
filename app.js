@@ -215,10 +215,62 @@ window.onload = function init() {
     shine,
   );
 
-  painting = new Painting(0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/mona_lisa.jpg");
-  painting2 = new Painting(2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/starry_night.jpg");
-  painting3 = new Painting(-2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/girl_with_pearl_earrings.jpg");
-  vase = new Vase(-5, 1, 1, 1, 0, 0, 0, amb, dif, spec, shine, "/textures/vase_texture.png");
+  painting = new Painting(
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    32,
+    "/paintings/mona_lisa.jpg",
+  );
+  painting2 = new Painting(
+    2,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    32,
+    "/paintings/starry_night.jpg",
+  );
+  painting3 = new Painting(
+    -2,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    32,
+    "/paintings/girl_with_pearl_earrings.jpg",
+  );
+  vase = new Vase(
+    -5,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    amb,
+    dif,
+    spec,
+    shine,
+    "/textures/vase_texture.png",
+  );
 
   render();
 };
