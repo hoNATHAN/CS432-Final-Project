@@ -168,6 +168,8 @@ var spotlight;
 var wallLeft;
 var wallRight;
 var ceiling;
+var dogObj;
+var spotlightObj;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -279,11 +281,11 @@ window.onload = function init() {
 
   painting2 = new Painting(
     2,
-    10,
+    1,
     1,
     1,
     0,
-    0,
+    90,
     0,
     1,
     1,
@@ -294,11 +296,11 @@ window.onload = function init() {
 
   painting3 = new Painting(
     -2,
-    10,
+    1,
     1,
     1,
     0,
-    0,
+    -90,
     0,
     1,
     1,
@@ -321,6 +323,8 @@ window.onload = function init() {
     shine,
     "/textures/vase_texture.png",
   );
+
+  dogObj= new OBJModel('/models/dog.obj');
   render();
 };
 
@@ -337,5 +341,6 @@ function render() {
     wallRight.draw();
     ceiling.draw();
     spotlight.draw();
+    dogObj.draw(camera);
   }, 100); //10fps
 }
