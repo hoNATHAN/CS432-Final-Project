@@ -102,6 +102,8 @@ class Camera {
     console.log(this.cameraMatrix);
     this.updateCameraMatrix();
   }
+
+  changeView() {}
 }
 
 var camera = new Camera(
@@ -161,11 +163,18 @@ class Drawable {
 }
 
 var plane;
-var painting2;
-var painting3;
+
+var monaLisa;
+var starryNight;
+var girl;
+var cliffWalk;
+
 var vase;
+var vase2;
+
 var wallLeft;
 var wallRight;
+var wallBack;
 var ceiling;
 var floor;
 
@@ -208,12 +217,12 @@ window.onload = function init() {
     shine,
   );
 
-  floor = new Floor(0, 0.1, 0, 2, 0, 0, 0, amb, dif, spec, shine);
+  floor = new Floor(0, 0.05, 0, 2, 0, 0, 0, amb, dif, spec, shine);
 
   wallLeft = new Wall(
-    -3,
-    0.5,
-    3,
+    -4.5,
+    0,
+    4,
     1,
     0,
     0,
@@ -225,12 +234,26 @@ window.onload = function init() {
   );
 
   wallRight = new Wall(
-    3,
-    0.5,
-    3,
+    4,
+    0,
+    4,
     1,
     0,
     0,
+    0,
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(0.6, 0.1, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    100.0,
+  );
+
+  wallBack = new Wall(
+    4,
+    0,
+    -4,
+    0.9,
+    0,
+    90,
     0,
     vec4(0.2, 0.2, 0.2, 1.0),
     vec4(0.6, 0.1, 0.0, 1.0),
@@ -252,13 +275,13 @@ window.onload = function init() {
     100.0,
   );
 
-  painting = new Painting(
-    0,
+  monaLisa = new Painting(
+    -4,
+    1.8,
+    2,
     1,
-    1,
-    1,
     0,
-    0,
+    -90,
     0,
     1,
     1,
@@ -267,13 +290,13 @@ window.onload = function init() {
     "/paintings/mona_lisa.jpg",
   );
 
-  painting2 = new Painting(
+  starryNight = new Painting(
+    4,
+    1.8,
     2,
-    10,
-    1,
     1,
     0,
-    0,
+    -90,
     0,
     1,
     1,
@@ -282,13 +305,28 @@ window.onload = function init() {
     "/paintings/starry_night.jpg",
   );
 
-  painting3 = new Painting(
+  cliffWalk = new Painting(
+    4,
+    1.8,
     -2,
-    10,
-    1,
     1,
     0,
+    -90,
     0,
+    1,
+    1,
+    1,
+    32,
+    "/paintings/the-scream.jpg",
+  );
+
+  girl = new Painting(
+    -4,
+    1.8,
+    -2,
+    1,
+    0,
+    -90,
     0,
     1,
     1,
@@ -298,10 +336,25 @@ window.onload = function init() {
   );
 
   vase = new Vase(
-    -5,
-    1,
-    1,
-    1,
+    -3,
+    0.5,
+    0,
+    0.5,
+    0,
+    0,
+    0,
+    amb,
+    dif,
+    spec,
+    shine,
+    "/textures/vase_texture.png",
+  );
+
+  vase2 = new Vase(
+    3,
+    0.5,
+    0,
+    0.5,
     0,
     0,
     0,
@@ -324,15 +377,19 @@ function render() {
     plane.draw();
 
     // paintings
-    painting.draw();
-    painting2.draw();
-    painting3.draw();
+    monaLisa.draw();
+    starryNight.draw();
+    girl.draw();
+    cliffWalk.draw();
 
+    // decor
     vase.draw();
+    vase2.draw();
 
     // art gallery room
     wallLeft.draw();
     wallRight.draw();
+    wallBack.draw();
     ceiling.draw();
     floor.draw();
   }, 100); //10fps

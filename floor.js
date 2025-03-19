@@ -58,7 +58,7 @@ class Floor extends Drawable {
     }
   }
 
-  static generateFloor(subdivisionDepth = 4) {
+  static generateFloor(subdivisionDepth = 2) {
     Floor.vertexPositions = [];
     Floor.vertexTextureCoords = [];
     Floor.indices = [];
@@ -150,7 +150,7 @@ class Floor extends Drawable {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
     };
 
-    image.src = "/textures/wood-planks.avif";
+    image.src = "/textures/woodfloor.jpg";
   }
 
   constructor(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, sp, sh) {
