@@ -167,6 +167,7 @@ var vase;
 var wallLeft;
 var wallRight;
 var ceiling;
+var floor;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -206,6 +207,8 @@ window.onload = function init() {
     spec,
     shine,
   );
+
+  floor = new Floor(0, 0.1, 0, 2, 0, 0, 0, amb, dif, spec, shine);
 
   wallLeft = new Wall(
     -3,
@@ -316,13 +319,21 @@ function render() {
   setTimeout(function () {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // outdoor ground
     plane.draw();
+
+    // paintings
     painting.draw();
     painting2.draw();
     painting3.draw();
+
     vase.draw();
+
+    // art gallery room
     wallLeft.draw();
     wallRight.draw();
     ceiling.draw();
+    floor.draw();
   }, 100); //10fps
 }
