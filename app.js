@@ -79,47 +79,36 @@ class Camera {
 
   move(key, step) {
     switch (key) {
-      case "ArrowUp":
+      case "w":
         this.vrp = add(this.vrp, scale(-step, this.n));
         break;
-      case "ArrowLeft":
+      case "a":
         this.vrp = add(this.vrp, scale(-step, this.u));
         break;
-      case "ArrowDown":
+      case "s":
         this.vrp = add(this.vrp, scale(step, this.n));
         break;
-      case "ArrowRight":
+      case "d":
         this.vrp = add(this.vrp, scale(step, this.u));
         break;
-      case "z":
-        this.rotateView(this.n, 5);
+      case "j":
+        this.rotateView(this.v, -10);
         break;
-      case "Z":
-        this.rotateView(this.n, -5);
-        break;
-      case "x":
-        this.rotateView(this.u, 5);
-        break;
-      case "X":
-        this.rotateView(this.u, -5);
-        break;
-      case "c":
-        this.rotateView(this.v, 5);
-        break;
-      case "C":
-        this.rotateView(this.v, -5);
+      case "l":
+        this.rotateView(this.v, 10);
         break;
     }
 
+    console.log(this.cameraMatrix);
     this.updateCameraMatrix();
   }
 }
 
 var camera = new Camera(
-  vec3(0, 5, 5),
+  vec3(0, 1, 5),
   vec3(1, 0, 0),
-  vec3(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2),
-  vec3(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2),
+  vec3(0, 1, 0),
+  vec3(0, 0, 1),
 );
 
 var light1 = new Light(
@@ -176,6 +165,9 @@ var painting2;
 var painting3;
 var vase;
 var spotlight;
+var wallLeft;
+var wallRight;
+var ceiling;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -191,7 +183,7 @@ window.onload = function init() {
   window.addEventListener("keydown", (event) => {
     const step = 1;
     const key = event.key;
-    camera.move(key, step);
+    camera.move(key.toLowerCase(), step);
   });
 
   var pos = vec3(0, 0, 0);
@@ -228,10 +220,107 @@ window.onload = function init() {
     light1
 );
 
-  painting = new Painting(0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/mona_lisa.jpg");
-  painting2 = new Painting(2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/starry_night.jpg");
-  painting3 = new Painting(-2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 32, "/paintings/girl_with_pearl_earrings.jpg");
-  vase = new Vase(-5, 1, 1, 1, 0, 0, 0, amb, dif, spec, shine, "/textures/vase_texture.png");
+  wallLeft = new Wall(
+    -3,
+    0.5,
+    3,
+    1,
+    0,
+    0,
+    0,
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(0.6, 0.1, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    100.0,
+  );
+
+  wallRight = new Wall(
+    3,
+    0.5,
+    3,
+    1,
+    0,
+    0,
+    0,
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(0.6, 0.1, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    100.0,
+  );
+
+  ceiling = new Ceiling(
+    0,
+    0,
+    3,
+    1,
+    0,
+    0,
+    0,
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(0.6, 0.1, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    100.0,
+  );
+
+  painting = new Painting(
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    32,
+    "/paintings/mona_lisa.jpg",
+  );
+
+  painting2 = new Painting(
+    2,
+    10,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    32,
+    "/paintings/starry_night.jpg",
+  );
+
+  painting3 = new Painting(
+    -2,
+    10,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    32,
+    "/paintings/girl_with_pearl_earrings.jpg",
+  );
+
+  vase = new Vase(
+    -5,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    amb,
+    dif,
+    spec,
+    shine,
+    "/textures/vase_texture.png",
+  );
   render();
 };
 
@@ -244,6 +333,9 @@ function render() {
     painting2.draw();
     painting3.draw();
     vase.draw();
+    wallLeft.draw();
+    wallRight.draw();
+    ceiling.draw();
     spotlight.draw();
   }, 100); //10fps
 }
