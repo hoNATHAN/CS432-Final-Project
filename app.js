@@ -33,6 +33,12 @@ class Camera {
     this.projectionMatrix = perspective(90.0, 1.0, 0.1, 200);
 
     this.updateCameraMatrix();
+    this.isFPS = true;
+
+    this.fpsVrp = vec3(vrp[0], vrp[1], vrp[2]);
+    this.fpsU = vec3(this.u[0], this.u[1], this.u[2]);
+    this.fpsV = vec3(this.v[0], this.v[1], this.v[2]);
+    this.fpsN = vec3(this.n[0], this.n[1], this.n[2]);
   }
 
   updateCameraMatrix() {
@@ -77,37 +83,64 @@ class Camera {
     this.u = vec3(u[0], u[1], u[2]);
   }
 
-  move(key, step) {
-    switch (key) {
-      case "w":
-        this.vrp = add(this.vrp, scale(-step, this.n));
-        break;
-      case "a":
-        this.vrp = add(this.vrp, scale(-step, this.u));
-        break;
-      case "s":
-        this.vrp = add(this.vrp, scale(step, this.n));
-        break;
-      case "d":
-        this.vrp = add(this.vrp, scale(step, this.u));
-        break;
-      case "j":
-        this.rotateView(this.v, -10);
-        break;
-      case "l":
-        this.rotateView(this.v, 10);
-        break;
+  changeView() {
+    // switch to a static surveillance camera
+    if (!this.isFPS) {
+      console.log("surveillance");
+      this.vrp = vec3(3, 3, 5);
+
+      this.n = normalize(vec3(1, 1, 2));
+      this.v = normalize(vec3(0, 1, 0));
+      this.u = normalize(cross(this.v, this.n));
+
+      this.v = normalize(cross(this.n, this.u));
+    } else {
+      // restore to fps camera
+      this.vrp = vec3(this.fpsVrp[0], this.fpsVrp[1], this.fpsVrp[2]);
+      this.u = vec3(this.fpsU[0], this.fpsU[1], this.fpsU[2]);
+      this.v = vec3(this.fpsV[0], this.fpsV[1], this.fpsV[2]);
+      this.n = vec3(this.fpsN[0], this.fpsN[1], this.fpsN[2]);
     }
 
-    console.log(this.cameraMatrix);
     this.updateCameraMatrix();
   }
 
-  changeView() {}
+  move(key, step) {
+    // change view if 'o' is pressed
+    if (key === "o") {
+      this.isFPS = !this.isFPS;
+      this.changeView();
+    }
+
+    if (this.isFPS) {
+      switch (key) {
+        case "w":
+          this.vrp = add(this.vrp, scale(-step, this.n));
+          break;
+        case "a":
+          this.vrp = add(this.vrp, scale(-step, this.u));
+          break;
+        case "s":
+          this.vrp = add(this.vrp, scale(step, this.n));
+          break;
+        case "d":
+          this.vrp = add(this.vrp, scale(step, this.u));
+          break;
+        case "j":
+          this.rotateView(this.v, -10);
+          break;
+        case "l":
+          this.rotateView(this.v, 10);
+          break;
+      }
+    }
+
+    this.updateCameraMatrix();
+  }
 }
 
 var camera = new Camera(
-  vec3(0, 1, 5),
+  vec3(0, 1, 10),
   vec3(1, 0, 0),
   vec3(0, 1, 0),
   vec3(0, 0, 1),
@@ -183,7 +216,6 @@ var floor;
 var dogObj;
 var spotlightObj;
 
-
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
   gl = canvas.getContext("webgl2");
@@ -198,7 +230,12 @@ window.onload = function init() {
   window.addEventListener("keydown", (event) => {
     const step = 1;
     const key = event.key;
-    camera.move(key.toLowerCase(), step);
+
+    if (key.toLowerCase() === "") {
+      console.log("HI");
+    } else {
+      camera.move(key.toLowerCase(), step);
+    }
   });
 
   var pos = vec3(0, 0, 0);
@@ -213,7 +250,7 @@ window.onload = function init() {
     pos[0],
     pos[1],
     pos[2],
-    scale,
+    20,
     rot[0],
     rot[1],
     rot[2],
@@ -223,21 +260,23 @@ window.onload = function init() {
     shine,
   );
 
-
   floor = new Floor(0, 0.05, 0, 2, 0, 0, 0, amb, dif, spec, shine);
 
   spotlight = new Spotlight(
-    1.0, 1.0, -5.0,  // Position (tx, ty, tz)
-    0.25,              // Scale (uniform scale factor)
-    0.0, 0.0, 0.0,    // Rotation angles (rotX, rotY, rotZ)
+    1.0,
+    1.0,
+    -5.0, // Position (tx, ty, tz)
+    0.25, // Scale (uniform scale factor)
+    0.0,
+    0.0,
+    0.0, // Rotation angles (rotX, rotY, rotZ)
     vec4(0.1, 0.1, 0.1, 1.0), // Ambient color (RGB)
     vec4(1.0, 1.0, 1.0, 1.0), // Diffuse color (RGB)
     vec4(1.0, 1.0, 1.0, 1.0), // Specular color (RGB)
-    shine,              // Shininess coefficient
-    "/textures/spotlight.jpg",  // Texture file path (optional)
-    light1
-);
-
+    shine, // Shininess coefficient
+    "/textures/spotlight.jpg", // Texture file path (optional)
+    light1,
+  );
 
   wallLeft = new Wall(
     -4.5,
@@ -385,8 +424,8 @@ window.onload = function init() {
     "/textures/vase_texture.png",
   );
 
-  dogObj= new OBJModel('/models/dog.obj');
-  dogObj.initializeTexture('/textures/checker.jpeg'); 
+  dogObj = new OBJModel("/models/dog.obj");
+  dogObj.initializeTexture("/textures/checker.jpeg");
 
   render();
 };
@@ -395,7 +434,6 @@ function render() {
   setTimeout(function () {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
 
     // outdoor ground
     plane.draw();
@@ -407,8 +445,7 @@ function render() {
     cliffWalk.draw();
 
     // decor
-    dogObj.rotationAngle = -5.0; 
-
+    dogObj.rotationAngle = -5.0;
 
     vase.draw();
     vase2.draw();
