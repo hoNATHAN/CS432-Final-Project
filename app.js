@@ -172,11 +172,17 @@ var cliffWalk;
 var vase;
 var vase2;
 
+var spotlight;
+
 var wallLeft;
 var wallRight;
 var wallBack;
 var ceiling;
 var floor;
+
+var dogObj;
+var spotlightObj;
+
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -217,7 +223,21 @@ window.onload = function init() {
     shine,
   );
 
+
   floor = new Floor(0, 0.05, 0, 2, 0, 0, 0, amb, dif, spec, shine);
+
+  spotlight = new Spotlight(
+    1.0, 1.0, -5.0,  // Position (tx, ty, tz)
+    0.25,              // Scale (uniform scale factor)
+    0.0, 0.0, 0.0,    // Rotation angles (rotX, rotY, rotZ)
+    vec4(0.1, 0.1, 0.1, 1.0), // Ambient color (RGB)
+    vec4(1.0, 1.0, 1.0, 1.0), // Diffuse color (RGB)
+    vec4(1.0, 1.0, 1.0, 1.0), // Specular color (RGB)
+    shine,              // Shininess coefficient
+    "/textures/spotlight.jpg",  // Texture file path (optional)
+    light1
+);
+
 
   wallLeft = new Wall(
     -4.5,
@@ -365,6 +385,9 @@ window.onload = function init() {
     "/textures/vase_texture.png",
   );
 
+  dogObj= new OBJModel('/models/dog.obj');
+  dogObj.initializeTexture('/textures/checker.jpeg'); 
+
   render();
 };
 
@@ -372,6 +395,7 @@ function render() {
   setTimeout(function () {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 
     // outdoor ground
     plane.draw();
@@ -383,6 +407,9 @@ function render() {
     cliffWalk.draw();
 
     // decor
+    dogObj.rotationAngle = -5.0; 
+
+
     vase.draw();
     vase2.draw();
 
@@ -391,6 +418,10 @@ function render() {
     wallRight.draw();
     wallBack.draw();
     ceiling.draw();
+
     floor.draw();
+
+    spotlight.draw();
+    dogObj.draw(camera);
   }, 100); //10fps
 }
