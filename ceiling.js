@@ -8,15 +8,17 @@ class Ceiling extends Drawable {
   //  0--------3
 
   static vertexPositions = [
-    vec3(-3.5, 3, 0.5), // bottom left
-    vec3(-3.5, 3.5, 0.5), // top left
-    vec3(3, 3.5, 0.5), // top right
-    vec3(3, 3, 0.5), // bottom right
+    // front face
+    vec3(-4, 3.5, 1.5), // bottom left
+    vec3(-4, 4, 1.5), // top left
+    vec3(4, 4, 1.5), // top right
+    vec3(4, 3.5, 1.5), // bottom right
 
-    vec3(-3.5, 3, -10), // bottom left
-    vec3(-3.5, 3.5, -10), // top left
-    vec3(3, 3.5, -10), // top right
-    vec3(3, 3, -10), // bottom right
+    // back face
+    vec3(-4, 3.5, -8), // bottom left
+    vec3(-4, 4, -8), // top left
+    vec3(4, 4, -8), // top right
+    vec3(4, 3.5, -8), // bottom right
   ];
 
   static texCoords = [
@@ -150,7 +152,7 @@ class Ceiling extends Drawable {
       );
       gl.generateMipmap(gl.TEXTURE_2D);
     };
-    image.src = "textures/concrete.jpg";
+    image.src = "textures/ceiling.jpeg";
   }
 
   constructor(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, spec, sh) {

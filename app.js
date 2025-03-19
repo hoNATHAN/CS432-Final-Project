@@ -102,6 +102,8 @@ class Camera {
     console.log(this.cameraMatrix);
     this.updateCameraMatrix();
   }
+
+  changeView() {}
 }
 
 var camera = new Camera(
@@ -161,15 +163,26 @@ class Drawable {
 }
 
 var plane;
-var painting2;
-var painting3;
+
+var monaLisa;
+var starryNight;
+var girl;
+var cliffWalk;
+
 var vase;
+var vase2;
+
 var spotlight;
+
 var wallLeft;
 var wallRight;
+var wallBack;
 var ceiling;
+var floor;
+
 var dogObj;
 var spotlightObj;
+
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -210,6 +223,9 @@ window.onload = function init() {
     shine,
   );
 
+
+  floor = new Floor(0, 0.05, 0, 2, 0, 0, 0, amb, dif, spec, shine);
+
   spotlight = new Spotlight(
     1.0, 1.0, -5.0,  // Position (tx, ty, tz)
     0.25,              // Scale (uniform scale factor)
@@ -222,10 +238,11 @@ window.onload = function init() {
     light1
 );
 
+
   wallLeft = new Wall(
-    -3,
-    0.5,
-    3,
+    -4.5,
+    0,
+    4,
     1,
     0,
     0,
@@ -237,12 +254,26 @@ window.onload = function init() {
   );
 
   wallRight = new Wall(
-    3,
-    0.5,
-    3,
+    4,
+    0,
+    4,
     1,
     0,
     0,
+    0,
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(0.6, 0.1, 0.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    100.0,
+  );
+
+  wallBack = new Wall(
+    4,
+    0,
+    -4,
+    0.9,
+    0,
+    90,
     0,
     vec4(0.2, 0.2, 0.2, 1.0),
     vec4(0.6, 0.1, 0.0, 1.0),
@@ -264,13 +295,13 @@ window.onload = function init() {
     100.0,
   );
 
-  painting = new Painting(
-    0,
+  monaLisa = new Painting(
+    -4,
+    1.8,
+    2,
     1,
-    1,
-    1,
     0,
-    0,
+    -90,
     0,
     1,
     1,
@@ -279,13 +310,13 @@ window.onload = function init() {
     "/paintings/mona_lisa.jpg",
   );
 
-  painting2 = new Painting(
+  starryNight = new Painting(
+    4,
+    1.8,
     2,
     1,
-    1,
-    1,
     0,
-    90,
+    -90,
     0,
     1,
     1,
@@ -294,10 +325,25 @@ window.onload = function init() {
     "/paintings/starry_night.jpg",
   );
 
-  painting3 = new Painting(
+  cliffWalk = new Painting(
+    4,
+    1.8,
     -2,
     1,
+    0,
+    -90,
+    0,
     1,
+    1,
+    1,
+    32,
+    "/paintings/the-scream.jpg",
+  );
+
+  girl = new Painting(
+    -4,
+    1.8,
+    -2,
     1,
     0,
     -90,
@@ -310,10 +356,25 @@ window.onload = function init() {
   );
 
   vase = new Vase(
-    -5,
-    1,
-    1,
-    1,
+    -3,
+    0.5,
+    0,
+    0.5,
+    0,
+    0,
+    0,
+    amb,
+    dif,
+    spec,
+    shine,
+    "/textures/vase_texture.png",
+  );
+
+  vase2 = new Vase(
+    3,
+    0.5,
+    0,
+    0.5,
     0,
     0,
     0,
@@ -335,16 +396,31 @@ function render() {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+
+    // outdoor ground
+    plane.draw();
+
+    // paintings
+    monaLisa.draw();
+    starryNight.draw();
+    girl.draw();
+    cliffWalk.draw();
+
+    // decor
     dogObj.rotationAngle = -5.0; 
 
-    plane.draw();
-    // painting.draw();
-    painting2.draw();
-    painting3.draw();
+
     vase.draw();
+    vase2.draw();
+
+    // art gallery room
     wallLeft.draw();
     wallRight.draw();
+    wallBack.draw();
     ceiling.draw();
+
+    floor.draw();
+
     spotlight.draw();
     dogObj.draw(camera);
   }, 100); //10fps

@@ -8,15 +8,17 @@ class Wall extends Drawable {
   //  0--------3
 
   static vertexPositions = [
-    vec3(-0.5, -0.5, 0.5), // bottom left
-    vec3(-0.5, 3, 0.5), // top left
-    vec3(0.2, 3, 0.5), // top right
-    vec3(0.2, -0.5, 0.5), // bottom right
+    // front face
+    vec3(0, -0.5, 0.5), // bottom left
+    vec3(0, 4, 0.5), // top left
+    vec3(0.5, 4, 0.5), // top right
+    vec3(0.5, -0.5, 0.5), // bottom right
 
-    vec3(-0.5, -0.5, -10), // bottom left
-    vec3(-0.5, 3, -10), // top left
-    vec3(0.2, 3, -10), // top right
-    vec3(0.2, -0.5, -10), // bottom right
+    // back face
+    vec3(0, -0.5, -9), // bottom left
+    vec3(0, 4, -9), // top left
+    vec3(0.5, 4, -9), // top right
+    vec3(0.5, -0.5, -9), // bottom right
   ];
 
   static texCoords = [
