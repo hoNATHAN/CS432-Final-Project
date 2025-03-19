@@ -334,6 +334,9 @@ function render() {
   setTimeout(function () {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    dogObj.rotationAngle = -5.0; 
+
     plane.draw();
     // painting.draw();
     painting2.draw();

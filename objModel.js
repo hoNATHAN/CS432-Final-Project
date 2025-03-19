@@ -4,7 +4,8 @@ class OBJModel {
         this.normals = [];
         this.textureCoords = [];
         this.indices = [];
-        this.colors = [];
+
+        this.rotationAngle = 0.0;
 
         // Load the .obj file
         const f = loadFileAJAX(fname);
@@ -133,44 +134,43 @@ class OBJModel {
     draw(camera) {
         const gl = window.gl;
         gl.useProgram(this.shaderProgram);
-
+    
+        // Update the model matrix with rotation
+        let rotationMatrix = rotateY(this.rotationAngle); // Rotate around the y-axis
+        this.modelMatrix = mult(rotationMatrix, this.modelMatrix);
+    
         // Bind vertex buffer
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
         gl.vertexAttribPointer(this.aPosition, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this.aPosition);
-
-        // Bind color buffer
-        // gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-        // gl.vertexAttribPointer(this.aColor, 4, gl.FLOAT, false, 0, 0);
-        // gl.enableVertexAttribArray(this.aColor);
-
+    
         // Bind normal buffer
         gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
         gl.vertexAttribPointer(this.aNormal, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this.aNormal);
-
+    
         // Bind texture coordinate buffer
         if (this.textureCoordBuffer) {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
             gl.vertexAttribPointer(this.aTexCoord, 2, gl.FLOAT, false, 0, 0);
             gl.enableVertexAttribArray(this.aTexCoord);
         }
-
+    
         // Bind texture
         if (this.texture) {
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.uniform1i(this.uTextureUnit, 0);
         }
-
+    
         // Bind index buffer
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-
+    
         // Set uniform matrices
         gl.uniformMatrix4fv(this.uModelMatrix, false, flatten(this.modelMatrix));
         gl.uniformMatrix4fv(this.uCameraMatrix, false, flatten(camera.cameraMatrix));
         gl.uniformMatrix4fv(this.uProjectionMatrix, false, flatten(camera.projectionMatrix));
-
+    
         // Draw the model
         gl.drawElements(gl.TRIANGLES, this.numIndices, gl.UNSIGNED_INT, 0);
     }
