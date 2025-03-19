@@ -157,6 +157,17 @@ var light1 = new Light(
   1,
 );
 
+var light2 = new Light(
+  vec3(0, 0, 0),
+  vec3(0, 1, -1),
+  vec4(0.4, 0.4, 0.4, 1.0),
+  vec4(1, 1, 1, 1),
+  vec4(1, 1, 1, 1),
+  0,
+  0,
+  1,
+);
+
 class Drawable {
   constructor(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, sp, sh) {
     this.tx = tx;
@@ -215,6 +226,8 @@ var floor;
 
 var dogObj;
 var spotlightObj;
+
+var sky;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -427,6 +440,8 @@ window.onload = function init() {
   dogObj = new OBJModel("/models/dog.obj");
   dogObj.initializeTexture("/textures/checker.jpeg");
 
+  sky = new Sky(0, 0, 0, 50, 0, -45, 0, amb, dif, spec, shine);
+
   render();
 };
 
@@ -446,19 +461,19 @@ function render() {
 
     // decor
     dogObj.rotationAngle = -5.0;
-
     vase.draw();
     vase2.draw();
+    spotlight.draw();
+    dogObj.draw(camera);
 
     // art gallery room
     wallLeft.draw();
     wallRight.draw();
     wallBack.draw();
     ceiling.draw();
-
     floor.draw();
 
-    spotlight.draw();
-    dogObj.draw(camera);
+    // skybox
+    sky.draw();
   }, 100); //10fps
 }
