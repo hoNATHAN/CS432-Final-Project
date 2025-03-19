@@ -17,11 +17,11 @@ class OBJModel {
             switch (strings[0]) {
                 case 'v': // Vertex
                     this.vertices.push(vec3(
-                        parseFloat(strings[1])*0.025,
-                        parseFloat(strings[2])* 0.025,
-                        parseFloat(strings[3])* 0.025
+                        parseFloat(strings[1]) * 0.025,
+                        parseFloat(strings[2]) * 0.025,
+                        parseFloat(strings[3]) * 0.025
                     ));
-                    this.colors.push(vec4(Math.random(), Math.random(), Math.random(), 1.0)); // Random color
+                    // this.colors.push(vec4(Math.random(), Math.random(), Math.random(), 1.0)); // Random color
                     break;
 
                 case 'vt': // Texture Coordinate
@@ -43,7 +43,8 @@ class OBJModel {
                     for (let i = 1; i < strings.length; i++) {
                         const indices = strings[i].split('/');
                         const vertexIndex = parseInt(indices[0]) - 1; // OBJ indices start at 1
-                        this.indices.push(vertexIndex);
+                        const texCoordIndex = parseInt(indices[1]) - 1; // Texture coordinate index
+                        this.indices.push({ vertexIndex, texCoordIndex });
                     }
                     break;
             }
@@ -73,21 +74,21 @@ class OBJModel {
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices.flat()), gl.STATIC_DRAW);
 
         // Color buffer
-        this.colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.colors.flat()), gl.STATIC_DRAW);
+        // this.colorBuffer = gl.createBuffer();
+        // gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.colors.flat()), gl.STATIC_DRAW);
 
         // Index buffer
         this.indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(this.indices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(this.indices.map(i => i.vertexIndex)), gl.STATIC_DRAW);
 
         // Normal buffer
         this.normalBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals.flat()), gl.STATIC_DRAW);
 
-        // Texture coordinate buffer (optional)
+        // Texture coordinate buffer
         if (this.textureCoords.length > 0) {
             this.textureCoordBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
@@ -104,13 +105,29 @@ class OBJModel {
 
         // Get attribute and uniform locations
         this.aPosition = gl.getAttribLocation(this.shaderProgram, "aPosition");
-        this.aColor = gl.getAttribLocation(this.shaderProgram, "aColor");
-        this.aNormal = gl.getAttribLocation(this.shaderProgram, "aNormal"); // Optional
-        this.aTexCoord = gl.getAttribLocation(this.shaderProgram, "aTexCoord"); // Optional
+        // this.aColor = gl.getAttribLocation(this.shaderProgram, "aColor");
+        this.aNormal = gl.getAttribLocation(this.shaderProgram, "aNormal");
+        this.aTexCoord = gl.getAttribLocation(this.shaderProgram, "aTexCoord");
 
         this.uModelMatrix = gl.getUniformLocation(this.shaderProgram, "modelMatrix");
         this.uCameraMatrix = gl.getUniformLocation(this.shaderProgram, "cameraMatrix");
         this.uProjectionMatrix = gl.getUniformLocation(this.shaderProgram, "projectionMatrix");
+        this.uTextureUnit = gl.getUniformLocation(this.shaderProgram, "uTextureUnit");
+    }
+
+    initializeTexture(imageSrc) {
+        var image = new Image();
+        image.onload = () => {
+            this.texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+            gl.generateMipmap(gl.TEXTURE_2D);
+        };
+        image.src = imageSrc;
     }
 
     draw(camera) {
@@ -123,20 +140,27 @@ class OBJModel {
         gl.enableVertexAttribArray(this.aPosition);
 
         // Bind color buffer
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-        gl.vertexAttribPointer(this.aColor, 4, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(this.aColor);
+        // gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+        // gl.vertexAttribPointer(this.aColor, 4, gl.FLOAT, false, 0, 0);
+        // gl.enableVertexAttribArray(this.aColor);
 
         // Bind normal buffer
         gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
         gl.vertexAttribPointer(this.aNormal, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this.aNormal);
 
-        // Bind texture coordinate buffer (optional)
+        // Bind texture coordinate buffer
         if (this.textureCoordBuffer) {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
             gl.vertexAttribPointer(this.aTexCoord, 2, gl.FLOAT, false, 0, 0);
             gl.enableVertexAttribArray(this.aTexCoord);
+        }
+
+        // Bind texture
+        if (this.texture) {
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.uniform1i(this.uTextureUnit, 0);
         }
 
         // Bind index buffer

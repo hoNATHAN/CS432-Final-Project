@@ -325,6 +325,8 @@ window.onload = function init() {
   );
 
   dogObj= new OBJModel('/models/dog.obj');
+  dogObj.initializeTexture('/textures/checker.jpeg'); 
+
   render();
 };
 
@@ -333,7 +335,7 @@ function render() {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     plane.draw();
-    painting.draw();
+    // painting.draw();
     painting2.draw();
     painting3.draw();
     vase.draw();
