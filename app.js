@@ -164,9 +164,12 @@ var plane;
 var painting2;
 var painting3;
 var vase;
+var spotlight;
 var wallLeft;
 var wallRight;
 var ceiling;
+var dogObj;
+var spotlightObj;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -206,6 +209,18 @@ window.onload = function init() {
     spec,
     shine,
   );
+
+  spotlight = new Spotlight(
+    1.0, 1.0, -5.0,  // Position (tx, ty, tz)
+    0.25,              // Scale (uniform scale factor)
+    0.0, 0.0, 0.0,    // Rotation angles (rotX, rotY, rotZ)
+    vec4(0.1, 0.1, 0.1, 1.0), // Ambient color (RGB)
+    vec4(1.0, 1.0, 1.0, 1.0), // Diffuse color (RGB)
+    vec4(1.0, 1.0, 1.0, 1.0), // Specular color (RGB)
+    shine,              // Shininess coefficient
+    "/textures/spotlight.jpg",  // Texture file path (optional)
+    light1
+);
 
   wallLeft = new Wall(
     -3,
@@ -266,11 +281,11 @@ window.onload = function init() {
 
   painting2 = new Painting(
     2,
-    10,
+    1,
     1,
     1,
     0,
-    0,
+    90,
     0,
     1,
     1,
@@ -281,11 +296,11 @@ window.onload = function init() {
 
   painting3 = new Painting(
     -2,
-    10,
+    1,
     1,
     1,
     0,
-    0,
+    -90,
     0,
     1,
     1,
@@ -309,6 +324,9 @@ window.onload = function init() {
     "/textures/vase_texture.png",
   );
 
+  dogObj= new OBJModel('/models/dog.obj');
+  dogObj.initializeTexture('/textures/checker.jpeg'); 
+
   render();
 };
 
@@ -316,13 +334,18 @@ function render() {
   setTimeout(function () {
     requestAnimationFrame(render);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    dogObj.rotationAngle = -5.0; 
+
     plane.draw();
-    painting.draw();
+    // painting.draw();
     painting2.draw();
     painting3.draw();
     vase.draw();
     wallLeft.draw();
     wallRight.draw();
     ceiling.draw();
+    spotlight.draw();
+    dogObj.draw(camera);
   }, 100); //10fps
 }
