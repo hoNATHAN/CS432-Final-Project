@@ -157,17 +157,6 @@ var light1 = new Light(
   1,
 );
 
-var light2 = new Light(
-  vec3(0, 0, 0),
-  vec3(0, 1, -1),
-  vec4(0.4, 0.4, 0.4, 1.0),
-  vec4(1, 1, 1, 1),
-  vec4(1, 1, 1, 1),
-  0,
-  0,
-  1,
-);
-
 class Drawable {
   constructor(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, sp, sh) {
     this.tx = tx;
@@ -229,6 +218,8 @@ var spotlightObj;
 
 var sky;
 
+var ceilingLamp;
+
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
   gl = canvas.getContext("webgl2");
@@ -273,7 +264,7 @@ window.onload = function init() {
     shine,
   );
 
-  floor = new Floor(0, 0.05, 0, 2, 0, 0, 0, amb, dif, spec, shine);
+  floor = new Floor(0, 0.001, 0, 2.2, 0, 0, 0, amb, dif, spec, shine);
 
   spotlight = new Spotlight(
     1.0,
