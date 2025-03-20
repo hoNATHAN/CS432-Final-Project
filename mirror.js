@@ -116,7 +116,7 @@ class Mirror extends Drawable {
 
     const level = 0;
     const internalFormat = gl.RGBA;
-    const size = 16; // Small power-of-2 size for placeholder
+    const size = 16;
     const format = gl.RGBA;
     const type = gl.UNSIGNED_BYTE;
 
