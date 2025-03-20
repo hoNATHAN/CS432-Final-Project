@@ -17,16 +17,16 @@ class Painting extends Drawable {
     let depth = 0.02;
     Painting.vertexPositions = [
       // Front face
-      vec3(-1.0, -1.0, depth), // 0: Bottom-left-front
-      vec3(1.0, -1.0, depth), // 1: Bottom-right-front
-      vec3(1.0, 1.0, depth), // 2: Top-right-front
-      vec3(-1.0, 1.0, depth), // 3: Top-left-front
+      vec3(-1.0, -1.0, depth),
+      vec3(1.0, -1.0, depth),
+      vec3(1.0, 1.0, depth),
+      vec3(-1.0, 1.0, depth),
 
       // Back face
-      vec3(-1.0, -1.0, -depth), // 4: Bottom-left-back
-      vec3(1.0, -1.0, -depth), // 5: Bottom-right-back
-      vec3(1.0, 1.0, -depth), // 6: Top-right-back
-      vec3(-1.0, 1.0, -depth), // 7: Top-left-back
+      vec3(-1.0, -1.0, -depth),
+      vec3(1.0, -1.0, -depth),
+      vec3(1.0, 1.0, -depth),
+      vec3(-1.0, 1.0, -depth),
     ];
 
     Painting.vertexTextureCoords = [
@@ -34,12 +34,12 @@ class Painting extends Drawable {
       vec2(0, 1),
       vec2(1, 1),
       vec2(1, 0),
-      vec2(0, 0), // Flipping Y for front
+      vec2(0, 0),
       // Back face
       vec2(0, 1),
       vec2(1, 1),
       vec2(1, 0),
-      vec2(0, 0), // Flipping Y for back
+      vec2(0, 0),
     ];
 
     Painting.indices = [
@@ -186,4 +186,3 @@ class Painting extends Drawable {
     gl.disableVertexAttribArray(Painting.aTextureCoordShader);
   }
 }
-
