@@ -140,7 +140,7 @@ class Camera {
 }
 
 var camera = new Camera(
-  vec3(0, 1, 10),
+  vec3(0, 1.5, 10),
   vec3(1, 0, 0),
   vec3(0, 1, 0),
   vec3(0, 0, 1),
@@ -200,7 +200,7 @@ var plane;
 var monaLisa;
 var starryNight;
 var girl;
-var cliffWalk;
+var scream;
 
 var vase;
 var vase2;
@@ -218,7 +218,7 @@ var spotlightObj;
 
 var sky;
 
-var ceilingLamp;
+var mirror;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -267,18 +267,18 @@ window.onload = function init() {
   floor = new Floor(0, 0.001, 0, 2.2, 0, 0, 0, amb, dif, spec, shine);
 
   spotlight = new Spotlight(
-    1.0,
-    1.0,
-    -5.0, // Position (tx, ty, tz)
-    0.25, // Scale (uniform scale factor)
-    0.0,
-    0.0,
-    0.0, // Rotation angles (rotX, rotY, rotZ)
-    vec4(0.1, 0.1, 0.1, 1.0), // Ambient color (RGB)
-    vec4(1.0, 1.0, 1.0, 1.0), // Diffuse color (RGB)
-    vec4(1.0, 1.0, 1.0, 1.0), // Specular color (RGB)
-    shine, // Shininess coefficient
-    "/textures/spotlight.jpg", // Texture file path (optional)
+    0,
+    3,
+    0,
+    0.25,
+    0,
+    0,
+    0,
+    vec4(0.1, 0.1, 0.1, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    shine,
+    "/textures/spotlight.jpg",
     light1,
   );
 
@@ -368,7 +368,7 @@ window.onload = function init() {
     "/paintings/starry_night.jpg",
   );
 
-  cliffWalk = new Painting(
+  scream = new Painting(
     4,
     1.8,
     -2,
@@ -433,6 +433,20 @@ window.onload = function init() {
 
   sky = new Sky(0, 0, 0, 50, 0, -45, 0, amb, dif, spec, shine);
 
+  mirror = new Mirror(
+    0,
+    2,
+    -3.99,
+    1.3,
+    0,
+    0,
+    0,
+    vec4(0.1, 0.1, 0.1, 1.0),
+    vec4(0.1, 0.1, 0.1, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    200.0,
+  );
+
   render();
 };
 
@@ -448,7 +462,7 @@ function render() {
     monaLisa.draw();
     starryNight.draw();
     girl.draw();
-    cliffWalk.draw();
+    scream.draw();
 
     // decor
     dogObj.rotationAngle = -5.0;
@@ -466,5 +480,8 @@ function render() {
 
     // skybox
     sky.draw();
+
+    // advanced mapping mirror
+    mirror.draw();
   }, 100); //10fps
 }

@@ -4,9 +4,7 @@ in vec2 aTextureCoord;
 
 out vec2 vTextureCoord;
 
-
 uniform mat4 modelMatrix, cameraMatrix, projectionMatrix;
-
 
 void main()
 {

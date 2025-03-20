@@ -16,13 +16,11 @@ class Painting extends Drawable {
   static generatePainting() {
     let depth = 0.02;
     Painting.vertexPositions = [
-      // Front face
       vec3(-1.0, -1.0, depth),
       vec3(1.0, -1.0, depth),
       vec3(1.0, 1.0, depth),
       vec3(-1.0, 1.0, depth),
 
-      // Back face
       vec3(-1.0, -1.0, -depth),
       vec3(1.0, -1.0, -depth),
       vec3(1.0, 1.0, -depth),
@@ -30,12 +28,11 @@ class Painting extends Drawable {
     ];
 
     Painting.vertexTextureCoords = [
-      // Front face
       vec2(0, 1),
       vec2(1, 1),
       vec2(1, 0),
       vec2(0, 0),
-      // Back face
+
       vec2(0, 1),
       vec2(1, 1),
       vec2(1, 0),
@@ -43,18 +40,8 @@ class Painting extends Drawable {
     ];
 
     Painting.indices = [
-      // Front face
-      0, 1, 2, 0, 2, 3,
-      // Back face
-      4, 6, 5, 4, 7, 6,
-      // Left face
-      4, 0, 3, 4, 3, 7,
-      // Right face
-      1, 5, 6, 1, 6, 2,
-      // Top face
-      3, 2, 6, 3, 6, 7,
-      // Bottom face
-      4, 5, 1, 4, 1, 0,
+      0, 1, 2, 0, 2, 3, 4, 6, 5, 4, 7, 6, 4, 0, 3, 4, 3, 7, 1, 5, 6, 1, 6, 2, 3,
+      2, 6, 3, 6, 7, 4, 5, 1, 4, 1, 0,
     ];
   }
 
